@@ -1,164 +1,204 @@
 var Resume = React.createClass({
-    render: function() {
-        var header_style = {
-            backgroundImage: this.props.resume.background_image ? "url(link)".replace('link', this.props.resume.background_image) : ""
+        displayName: "Resume",
+        render: function() {
+            var e = {
+                backgroundImage: this.props.resume.background_image ?
+                    "url(link)".replace("link", this.props.resume.background_image) :
+                    ""
+            };
+            return React.createElement(
+                "div", { className: "resume-container animated fadeInUp" },
+                React.createElement(
+                    "header", { style: e },
+                    React.createElement("img", {
+                        className: "avatar",
+                        src: this.props.resume.avatar
+                    })
+                ),
+                React.createElement(BasicInfo, {
+                    basicinfo: this.props.resume.basicinfo
+                }),
+                React.createElement(Social, { social: this.props.resume.social }),
+                React.createElement(ExperienceList, {
+                    type: "社团/组织",
+                    experiences: this.props.resume.socialExperiences
+                }),
+                React.createElement(ExperienceList, {
+                    type: "实习经历",
+                    experiences: this.props.resume.InternExperiences
+                })
+            );
         }
-
-        return (
-            <div className="resume-container animated fadeInUp">
-                <header style={header_style}>
-                    <img className="avatar" src={this.props.resume.avatar} />
-                </header>
-                <BasicInfo basicinfo={this.props.resume.basicinfo}/>
-                <Social social={this.props.resume.social}/>
-                <ExperienceList type="获奖经历" experiences={this.props.resume.Awards}/>
-                <ExperienceList type="社团/组织" experiences={this.props.resume.socialExperiences}/>
-                <ExperienceList type="实习经历" experiences={this.props.resume.InternExperiences}/>
-                <ExperienceList type="项目经验" experiences={this.props.resume.ProjectExperience}/>
-            </div>
-        )
-    }
-});
-
-var BasicInfo = React.createClass({
-    render: function(){
-
-        return (
-            <section className="basicinfo" >
-                <div className="text-info name">
-                    {this.props.basicinfo.name}
-                </div>
-                <div className="text-info description">
-                    {this.props.basicinfo.description}
-                </div>
-                <div className="text-info">
-                    <i className="fa fa-university"></i>
-                    {this.props.basicinfo.school}·{this.props.basicinfo.profession}
-                </div>
-                <div className="text-info">
-                    <i className="fa fa-user"></i>
-                    {this.props.basicinfo.sex}·{this.props.basicinfo.education}·{this.props.basicinfo.workage}
-                </div>
-                <div className="phone text-info inline-block">
-                    {!this.props.basicinfo.phone ? "" :
-                        <div>
-                            <i className="fa fa-phone"></i>
-                            <a href={"tel:" + this.props.basicinfo.phone}>{this.props.basicinfo.phone}</a>
-                        </div>
-                    }
-                </div>
-                <div className="email text-info inline-block">
-                    {!this.props.basicinfo.email ? "" :
-                        <div>
-                            <i className="fa fa-envelope-o"></i>
-                            <a href={"mailto:" + this.props.basicinfo.email}>{this.props.basicinfo.email}</a>
-                        </div>
-                    }
-                </div>
-            </section>
-        )
-    }
-})
-
-var Social = React.createClass({
-    render: function(){
-        return (
-            <section className="social">
-                {this.props.social.map(function(item){
-                    //如果有icon 优先使用icon
-                    if(!item.icon){
-                        return (
-                            <a className={'fa fa-' + item.type} href={item.link} key={item.type + item.link}></a>
+    }),
+    BasicInfo = React.createClass({
+        displayName: "BasicInfo",
+        render: function() {
+            return React.createElement(
+                "section", { className: "basicinfo" },
+                React.createElement(
+                    "div", { className: "text-info name" },
+                    this.props.basicinfo.name
+                ),
+                React.createElement(
+                    "div", { className: "text-info description" },
+                    this.props.basicinfo.description
+                ),
+                React.createElement(
+                    "div", { className: "text-info" },
+                    React.createElement("i", { className: "fa fa-university" }),
+                    this.props.basicinfo.school,
+                    "·",
+                    this.props.basicinfo.profession
+                ),
+                React.createElement(
+                    "div", { className: "text-info" },
+                    React.createElement("i", { className: "fa fa-user" }),
+                    this.props.basicinfo.sex,
+                    "·",
+                    this.props.basicinfo.education,
+                    "·",
+                    this.props.basicinfo.workage
+                ),
+                React.createElement(
+                    "div", { className: "phone text-info inline-block" },
+                    this.props.basicinfo.phone ?
+                    React.createElement(
+                        "div",
+                        null,
+                        React.createElement("i", { className: "fa fa-phone" }),
+                        React.createElement(
+                            "a", { href: "tel:" + this.props.basicinfo.phone },
+                            this.props.basicinfo.phone
                         )
-                    }
-                    return (
-                        <a href={item.link} key={item.type + item.link}>
-                            <img src={item.icon}/>
-                        </a>
+                    ) :
+                    ""
+                ),
+                React.createElement(
+                    "div", { className: "email text-info inline-block" },
+                    this.props.basicinfo.email ?
+                    React.createElement(
+                        "div",
+                        null,
+                        React.createElement("i", { className: "fa fa-envelope-o" }),
+                        React.createElement(
+                            "a", { href: "mailto:" + this.props.basicinfo.email },
+                            this.props.basicinfo.email
+                        )
+                    ) :
+                    ""
+                )
+            );
+        }
+    }),
+    Social = React.createClass({
+        displayName: "Social",
+        render: function() {
+            return React.createElement(
+                "section", { className: "social" },
+                this.props.social.map(function(e) {
+                    return e.icon ?
+                        React.createElement(
+                            "a", { href: e.link, key: e.type + e.link },
+                            React.createElement("img", { src: e.icon })
+                        ) :
+                        React.createElement("a", {
+                            className: "fa fa-" + e.type,
+                            href: e.link,
+                            key: e.type + e.link
+                        });
+                })
+            );
+        }
+    }),
+    ExperienceList = React.createClass({
+        displayName: "ExperienceList",
+        render: function() {
+            return React.createElement(
+                "section", { className: "experiencelist" },
+                React.createElement(
+                    "div", { className: "experience-type" },
+                    this.props.type
+                ),
+                this.props.experiences.map(function(e) {
+                    return React.createElement(Experience, {
+                        experience: e,
+                        key: e.name
+                    });
+                })
+            );
+        }
+    }),
+    Experience = React.createClass({
+        displayName: "Experience",
+        render: function() {
+            return React.createElement(
+                "section", { className: "experience" },
+                React.createElement(
+                    "div", { className: "clearfix item" },
+                    (function(e) {
+                        return e && "" != e ?
+                            React.createElement(
+                                "div", { className: "icon fl" },
+                                React.createElement("img", { src: e })
+                            ) :
+                            void 0;
+                    })(this.props.experience.icon),
+                    React.createElement(
+                        "div", { className: "fl name-title" },
+                        React.createElement(
+                            "div", { className: "name" },
+                            this.props.experience.name_link ?
+                            React.createElement(
+                                "a", { href: this.props.experience.name_link },
+                                this.props.experience.name
+                            ) :
+                            React.createElement("a", null, this.props.experience.name),
+                            this.props.experience.name_link ?
+                            React.createElement("i", { className: "fa fa-link" }) :
+                            ""
+                        ),
+                        React.createElement(
+                            "div", { className: "title" },
+                            this.props.experience.title
+                        )
+                    ),
+                    React.createElement(
+                        "div", { className: "fr time-location" },
+                        React.createElement(
+                            "div", { className: "time" },
+                            this.props.experience.time
+                        ),
+                        React.createElement(
+                            "div", { className: "location" },
+                            this.props.experience.location ?
+                            React.createElement(
+                                "div",
+                                null,
+                                React.createElement("i", { className: "fa fa-map-marker" }),
+                                this.props.experience.location
+                            ) :
+                            ""
+                        )
                     )
-
-                })}
-            </section>
-
+                ),
+                this.props.experience.description ?
+                React.createElement(
+                    "div", { className: "description" },
+                    this.props.experience.description
+                ) :
+                ""
+            );
+        }
+    });
+fetch("/resume/data/resume.json")
+    .then(function(e) {
+        return e.json();
+    })
+    .then(function(e) {
+        React.render(
+            React.createElement(Resume, { resume: e }),
+            document.getElementById("container")
         );
-    }
-})
-
-var ExperienceList = React.createClass({
-    render: function(){
-        return (
-            <section className="experiencelist">
-                <div className="experience-type">
-                    {this.props.type}
-                </div>
-                {this.props.experiences.map(function(experience){
-                    return (
-                        <Experience experience={experience} key={experience.name}/>
-                    )
-                })}
-            </section>
-        )
-    }
-})
-
-var Experience  = React.createClass({
-    render: function(){
-        return (
-            <section className="experience">
-                <div className="clearfix item">
-                    {(function(icon){
-                        if(icon && icon != ''){
-                            return (
-                                <div className="icon fl">
-                                    <img src={icon}/>
-                                </div>
-                            )
-                        }
-                    })(this.props.experience.icon)}
-
-                    <div className="fl name-title">
-                        <div className="name">
-                            {!this.props.experience.name_link ?
-                                <a>{this.props.experience.name}</a> :
-                                <a href={this.props.experience.name_link}>{this.props.experience.name}</a>
-                            }
-                            {!this.props.experience.name_link ? "" :
-                                <i className="fa fa-link"></i>
-                            }
-                        </div>
-                        <div className="title">
-                            {this.props.experience.title}
-                        </div>
-                    </div>
-                    <div className="fr time-location">
-                        <div className="time">
-                            {this.props.experience.time}
-                        </div>
-                        <div className="location">
-                            {!this.props.experience.location ? "" :
-                                <div>
-                                    <i className="fa fa-map-marker"></i>
-                                    {this.props.experience.location}
-                                </div>
-                            }
-                        </div>
-                    </div>
-                </div>
-                {!this.props.experience.description ? "" :
-                    <div className="description">
-                        {this.props.experience.description}
-                    </div>
-                }
-            </section>
-        )
-    }
-})
-
-fetch('/resume/data/resume.json')
-  .then(function(response) {
-    return response.json()
-  }).then(function(json) {
-    React.render( <Resume resume={json} /> , document.getElementById('container'));
-  }).catch(function(ex) {
-    console.log('parsing failed', ex)
-  })
+    })["catch"](function(e) {
+        console.log("parsing failed", e);
+    });
